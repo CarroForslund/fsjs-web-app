@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const User = require('./models/user');
@@ -14,18 +15,11 @@ const User = require('./models/user');
 // npm WARN bootstrap@4.1.1 requires a peer of jquery@1.9.1 - 3 but none is installed. You must install peer dependencies yourself.
 // npm WARN bootstrap@4.1.1 requires a peer of popper.js@^1.14.3 but none is installed. You must install peer dependencies yourself.
 
-// CONFIGURE GitHub STRATEGY
-passport.use(new GitHubStrategy({
-  clientID: process.env.GITHUB_CLIENT_ID,
-  clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/github/return"
-  },
-  function(accessToken, refreshToken, profile, done){
-
-    if(profile.emails[0]) {
-      User.findOneAndUpdate(
-      {
-        email: profile.emails[0].value},
+// CONFIGURE LOGIN STRATEGIES ==================================================
+function generateOrFindUser(accessToken, refreshToken, profile, done){
+  if(profile.emails[0]) {
+    User.findOneAndUpdate(
+      { email: profile.emails[0] },
       {
         name: profile.displayName || profile.username,
         email: profile.emails[0].value,
@@ -34,14 +28,30 @@ passport.use(new GitHubStrategy({
       {
         upsert: true
       },
-      done);
-
-    }
-    else {
-    const noEmailError = new Error ("Your email privac y settings prevent you from signing into Hashtag Finder!");
+    done
+  );
+  } else {
+    var noEmailError = new Error("Your email privacy settings prevent you from signing into Bookworm.");
     done(noEmailError, null);
   }
-}));
+}
+
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/auth/github/return'
+  },
+  generateOrFindUser)
+);
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/return",
+  profileFields: ['id', 'displayName', 'photos', 'email']
+},
+  generateOrFindUser)
+);
 
 passport.serializeUser(function(user, done){
   done(null, user._id); //null for error
@@ -66,7 +76,7 @@ const auth = require('./routes/auth');
 
 const app = express();
 
-// VIEW ENGINE SETUP
+// VIEW ENGINE SETUP ===========================================================
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -82,9 +92,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Get Hashtag results from Instagram
 // TODO: AJAX call to https://api.instagram.com/v1/tags/{tag-name}/media/recent?access_token=ACCESS-TOKEN
 
-// MONGO DB CONNECTION
+// MONGO DB CONNECTION =========================================================
 mongoose.connect("mongodb://localhost:27017/hashtag-finder");
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 // SESSION CONFIG FOR Passport and MongoDB
 const sessionOptions = {
@@ -110,29 +120,39 @@ db.on('error', console.error.bind(console, 'connection error:'));
 app.use('/', routes);
 app.use('/auth', auth);
 
-// CATCH 404 AND FORWARD TO ERROR HANDLER
+// CATCH 404 AND FORWARD TO ERROR HANDLER ======================================
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('File not Found');
   err.status = 404;
   next(err);
 });
 
 // ERROR HANDLERS
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
+// // development error handler
+// // will print stacktrace
+// if (app.get('env') === 'development') {
+//   app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.render('error', {
+//       message: err.message,
+//       error: err
+//     });
+//   });
+// }
+//
+// // production error handler
+// // no stacktraces leaked to user
+// app.use(function(err, req, res, next) {
+//   res.status(err.status || 500);
+//   res.render('error', {
+//     message: err.message,
+//     error: {}
+//   });
+// });
 
-// production error handler
-// no stacktraces leaked to user
+// error handler
+// define as the last app.use callback
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -140,6 +160,17 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+
+
+
+
+
+
+
+
+
 
 // app.use(morgan('dev'));
 
