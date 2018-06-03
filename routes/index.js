@@ -1,24 +1,22 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var mid = require('../middleware');
 
-// GET register page
+// GET signup page
 router.get('/signup', function(req, res, next) {
-  res.render('signup', { title: 'Signup' });
+  res.render('signup', { title: 'Sign Up' });
 });
 
 // POST signup page
 router.post('/signup', function(err, req, res, next) {
-  console.log('post route');
   if (  req.body.email &&
         req.body.name &&
         req.body.password &&
         req.body.confirmPassword ) {
 
-    console.log('all fields are filled');
     // Confirm that the user typed in the same password twice
     if (req.body.password !== req.body.confirmPassword) {
-      console.log('password and confirmPasswords are equal');
       var err = new Error('Passwords do not match.');
       err.status = 400;
       return next(err);
@@ -32,14 +30,15 @@ router.post('/signup', function(err, req, res, next) {
     }
 
     // Use the schemas's create method to insert document into Mongo
-    User.create (userData, function (error, user) {
-      console.log('user');
-      if (error) {
-        return next(error);
-      }
-      else {
-        return res.redirect('/profile');
-      }
+    User.create(userData, function (error, user) {
+      user.save( (error, savedUser) => {
+        if (error) {
+          return next(error);
+        }
+        else {
+          return res.redirect('/profile');
+        }
+      })
     });
   }
   else  {
