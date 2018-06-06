@@ -11,7 +11,7 @@ const FacebookStrategy  = require('passport-facebook').Strategy;
 const session           = require('express-session');
 const MongoStore        = require('connect-mongo')(session);
 const User              = require('./models/user');
-const appConfig         = require('./config/app-config');
+const config            = require('./config/config');
 
 // npm WARN bootstrap@4.1.1 requires a peer of jquery@1.9.1 - 3 but none is installed. You must install peer dependencies yourself.
 // npm WARN bootstrap@4.1.1 requires a peer of popper.js@^1.14.3 but none is installed. You must install peer dependencies yourself.
@@ -41,9 +41,9 @@ passport.use(new GitHubStrategy({
     // clientID: process.env.GITHUB_CLIENT_ID,
     // clientSecret: process.env.GITHUB_CLIENT_SECRET,
     // callbackURL: 'http://localhost:3000/auth/github/return'
-    clientID: appConfig.github.client_id,
-    clientSecret: appConfig.github.client_secret,
-    callbackURL: appConfig.github.callback_url
+    clientID: config.github.client_id,
+    clientSecret: config.github.client_secret,
+    callbackURL: config.github.callback_url
   },
   generateOrFindUser)
 );
@@ -53,10 +53,10 @@ passport.use(new FacebookStrategy({
   // clientSecret: process.env.FACEBOOK_APP_SECRET,
   // callbackURL: "http://localhost:3000/auth/facebook/return",
   // profileFields: ['id', 'displayName', 'photos', 'email']
-  clientID: appConfig.facebook.app_id,
-  clientSecret: appConfig.facebook.app_secret,
-  callbackURL: appConfig.facebook.callback_url,
-  profileFields: appConfig.facebook.profile_fields
+  clientID: config.facebook.app_id,
+  clientSecret: config.facebook.app_secret,
+  callbackURL: config.facebook.callback_url,
+  profileFields: config.facebook.profile_fields
 },
   generateOrFindUser)
 );
