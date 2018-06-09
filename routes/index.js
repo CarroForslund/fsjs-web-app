@@ -1,72 +1,61 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var mid = require('../middleware');
+const express = require('express');
+const router = express.Router();
 
-// GET signup page
-router.get('/signup', function(req, res, next) {
-  res.render('signup', { title: 'Sign Up' });
-});
 
-// POST signup page
-router.post('/signup', function(err, req, res, next) {
-  if (  req.body.email &&
-        req.body.name &&
-        req.body.password &&
-        req.body.confirmPassword ) {
-
-    // Confirm that the user typed in the same password twice
-    if (req.body.password !== req.body.confirmPassword) {
-      var err = new Error('Passwords do not match.');
-      err.status = 400;
-      return next(err);
-    }
-
-    // Create user object with form input
-    var userData = {
-      email: req.body.email,
-      name: req.body.name,
-      password: req.body.password
-    }
-
-    // Use the schemas's create method to insert document into Mongo
-    User.create(userData, function (error, user) {
-      user.save( (error, savedUser) => {
-        if (error) {
-          return next(error);
-        }
-        else {
-          return res.redirect('/profile');
-        }
-      })
-    });
-  }
-  else  {
-    console.log('error');
-    var err = new Error('All fields are required.');
-    err.status = 400;
-    return next(err);
-  }
-});
-
-// GET home page
+// GET search page
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Signup', user: req.user });
+  res.render('index', { user: req.user });
 });
 
-// GET home page
-router.get('/about', function(req, res, next) {
-  res.render('about', { title: 'About Hashtag Finder' });
+// POST search page
+router.post('/', function(req, res, next) {
+  //trigger search function (twitter & instagram)
+  const hashtag = req.body.hashtag;
+
+  // TODO: Move this function to the right place
+  const config = require('./../config/config');
+
+  // ACCESS TWITTER (move?!?)
+  const Twit = require('twit');
+  const T = new Twit(config.twitter);
+
+  var tweetResults = null;
+  var instaResults = null;
+
+  T.get('search/tweets', { q: '#'+ hashtag +' since:2017-01-01', count: 5, lang: 'en' }, function(err, data, response) {
+    if(err){
+      // TODO: Make sure to throw a proper Error
+      console.log("An error occured", err);
+    }
+    else {
+      tweetResults = data.statuses;
+    }
+  })
+  .then(function(){
+
+    //Get instagram posts
+
+  })
+  .then(function(){
+    res.render('index', {
+      user: req.user,
+      hashtag: hashtag,
+      tweets: tweetResults,
+      // instas: instaResults,
+    });
+  })
+
 });
+
 
 // GET profile page
 router.get('/profile', function(req, res, next) {
-  res.render('profile', { title: 'Profile', user: req.user });
+  res.render('profile', { user: req.user });
 });
 
 // GET login page
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Log In', user: req.user });
+  res.render('login', { user: req.user });
 });
 
 module.exports = router;

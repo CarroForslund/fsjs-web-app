@@ -1,4 +1,10 @@
 extends layout
 
 block content
-  h2 Hello!
+  h1 Hello!
+  p If you're logged in you can make your search here
+  p If you're not logged in you will see the login page instead
+  
+  include search
+  if(hashtag)
+    include result

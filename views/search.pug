@@ -1,4 +1,5 @@
-extends layout
-
-block content
-  h1 Search
+#search
+  h2 Make your hashtag search here!
+  form(action='/', method='post')
+    input(type='text', name='hashtag', placeholder='Search for hashtag...')
+    button(type='submit') Search

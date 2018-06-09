@@ -1,38 +1,27 @@
-doctype html
-html(lang="en")
-  head
-    title Hashtag Finder
-  body
-    header
-      h1 Hashtag Finder
-      p [display user information here] [logout button]
-    main
-      section#search
-        h2 Make your hashtag search here!
-        form(action='', method'')
-          input(type='text', name='hashtag', placeholder='Search for hashtag...')
-          button(type='submit') Search
-      section#twitter
-        h2 Results for [hashtag] on Twitter
-        ul
-          each tweet in tweets
-            li
-              p= tweet.created_at
-              p= tweet.text
-              // tweet.created_at
-              // tweet.text
-              // tweet.retweet_count
-              // tweet.favorite_count
-
-              // tweet.user.id_str || tweet.user.id
-              // tweet.user.profile_background_image_url || tweet.user.profile_background_image_url_https
-              // tweet.user.profile_image_url || tweet.user.profile_image_url_https
-              // tweet.user.name
-              // tweet.user.screen_name
-              
-      section#instagram
-        h2 Results for [hashtag] on Instagram
-        p [display instagram results here]
-    footer
-      h2 Footer
-      p [foter info goes here]
+#twitter
+  h2 Results for the hashtag "#{hashtag}" on Twitter
+  p [display twitter results here]
+  ul
+    each tweet in tweets
+      li
+        p= tweet.created_at
+        p= tweet.text
+        //- p= tweet.retweet_count
+        //- p= tweet.favorite_count
+        //- 
+        //- p= tweet.user.id_str || tweet.user.id
+        //- p= tweet.user.profile_background_image_url || tweet.user.profile_background_image_url_https
+        //- p= tweet.user.profile_image_url || tweet.user.profile_image_url_https
+        //- p= tweet.user.name
+        //- p= tweet.user.screen_name
+        
+#instagram
+  h2 Results for the hashtag "#{hashtag}" on Instagram
+  p [display instagram results here]
+  //- ul
+  //-   each insta in instas
+  //-     li
+        //- p= post.thumbnail
+        //- p= post.date
+        //- p= post.owner_id
+        //- p= post.text
