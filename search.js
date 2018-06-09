@@ -1,6 +1,7 @@
-const config = require('./../config/config');
+const config = require('./config/config');
 const Twit = require('twit');
 const T = new Twit(config.twitter);
+const results = null;
 
 function twitterSearch(hashtag){
 
@@ -15,6 +16,4 @@ function twitterSearch(hashtag){
   });
 }
 
-function instagramSearch(){
-
-}
+module.exports = { return results }
