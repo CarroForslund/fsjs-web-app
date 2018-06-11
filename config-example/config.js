@@ -2,29 +2,39 @@ module.exports = {
 
   twitter: {
 
-    consumer_key:         'somethingHere',
-    consumer_secret:      'somethingHere',
-    access_token:         'somethingHere',
-    access_token_secret:  'somethingHere'
+    consumer_key:         '',
+    consumer_secret:      '',
+    access_token:         '',
+    access_token_secret:  ''
+    // timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 
   },
   facebook: {
-    app_id:         'somethingHere',
-    app_secret:     'somethingHere',
-    callback_url:   'somethingHere',
-    profile_fields: ['id', 'displayName', 'photos', 'email']
+    app_id:       '',
+    app_secret:   '',
+    callback_url:    'http://localhost:3000/auth/facebook/return',
+    profile_fields:  ['id', 'displayName', 'photos', 'email']
   },
   instagram : {
 
-    client_id:      'somethingHere',
-    client_secret:  'somethingHere',
+    // username:       '',
+    // password:       '',
+    client_id:      '',
+    client_secret:  '',
+    // redirect_uri:   'http://localhost:3000/auth',
+    // auth_url:       'yourAuthUrl'
 
   },
-  github : {
+  flickr: {
 
-    client_id:      'somethingHere',
-    client_secret:  'somethingHere',
-    callback_url:   'somethingHere'
+    api_key: ''
+
   }
+  // github : {
+  //
+  //   client_id:      '',
+  //   client_secret:  '',
+  //   callback_url:   ''
+  // }
 
 }
