@@ -50,7 +50,7 @@ router.post('/', function(req, res, next) {
 
         flickr.get("photos.getContext", {"photo_id": photo.id }, function(err, result){
           if (err) return console.error(err);
-          console.log(result.prevphoto.title);
+          // console.log(result.prevphoto.title);
           flickrResults.push({
             text: result.prevphoto.title,
             url: result.prevphoto.thumb,
@@ -68,13 +68,13 @@ router.post('/', function(req, res, next) {
       // tempFlickrResult = result.photos;
     })
   )
-  .then(function(){
-    console.log(flickrResults);
+  .then(function(result){
+    console.log(result.data.statuses);
     res.render('index', {
       user: req.user,
       hashtag: hashtag,
       tweets: tweetResults,
-      flickrPhotos: flickrResults
+      flickrPhotos: result.data.statuses
       // instas: instaResults,
     });
   })
