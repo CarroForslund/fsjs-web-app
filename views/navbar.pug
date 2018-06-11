@@ -1,8 +1,18 @@
-nav
-  div
-    a(href='/') Search
-    a(href='/profile') My Profile
-    if (user)
-      a(href='/logout') Log Out
-    else
-      a(href='/login') Log In
+nav.container.d-flex
+  a.p-2.flex-grow-1(href='/') Hashtag Finder
+  a.p-2(href='/') Search
+  a.p-2(href='/profile') My Profile
+  if(user)
+    a.p-2(href='/logout') Log Out
+  else
+    a.p-2(href='/login') Log In
+//- ul.nav.d-flex
+//-   li.nav-item.p-2.flex-grow-1
+//-     a.nav-link.active(href="/") Hashtag Finder
+//-   li.nav-item.p-2
+//-     a.nav-link(href="/") Search
+//-   li.nav-item.p-2
+//-     if(user)
+//-       a.nav-link(href='/logout') Log Out
+//-     else
+//-       a.p-2(href='/login') Log In

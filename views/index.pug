@@ -1,10 +1,10 @@
 extends layout
 
 block content
-  h1 Hello!
-  p If you're logged in you can make your search here
-  p If you're not logged in you will see the login page instead
-  
-  include search
+  .jumbotron.jumbotron-fluid.justify-content-center
+    .container.text-center
+      h1.display-2 Hashtag Finder
+      p If you're logged in you can make your search here. If not you will see the login page instead
+      include search
   if(hashtag)
     include result

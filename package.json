@@ -30,6 +30,7 @@
     "mongodb": "^3.0.8",
     "mongoose": "^5.0.16",
     "morgan": "^1.9.0",
+    "node-flickr": "^1.0.0",
     "nodemon": "^1.17.3",
     "npm": "^6.1.0",
     "passport": "^0.4.0",

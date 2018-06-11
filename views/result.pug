@@ -1,27 +1,34 @@
-#twitter
-  h2 Results for the hashtag "#{hashtag}" on Twitter
-  p [display twitter results here]
-  ul
+.container.row
+  .col-md
+    h2 Results for ##{hashtag} on Twitter
     each tweet in tweets
-      li
-        p= tweet.created_at
-        p= tweet.text
-        //- p= tweet.retweet_count
-        //- p= tweet.favorite_count
-        //- 
-        //- p= tweet.user.id_str || tweet.user.id
-        //- p= tweet.user.profile_background_image_url || tweet.user.profile_background_image_url_https
-        //- p= tweet.user.profile_image_url || tweet.user.profile_image_url_https
-        //- p= tweet.user.name
-        //- p= tweet.user.screen_name
+      img(src=tweet.user.profile_image_url_https alt=tweet.user.screen_name)
+      small= 'Posted by ' + tweet.user.screen_name
+      p= tweet.text
+      //- p= tweet.retweet_count
+      //- p= tweet.favorite_count
+      //- 
+      //- p= tweet.user.id_str || tweet.user.id
+      //- p= tweet.user.profile_background_image_url || tweet.user.profile_background_image_url_https
+      //- p= tweet.user.profile_image_url || tweet.user.profile_image_url_https
+      //- p= tweet.user.name
+      //- p= tweet.user.screen_name
         
-#instagram
-  h2 Results for the hashtag "#{hashtag}" on Instagram
-  p [display instagram results here]
-  //- ul
-  //-   each insta in instas
-  //-     li
-        //- p= post.thumbnail
-        //- p= post.date
-        //- p= post.owner_id
-        //- p= post.text
+  .col-md
+    h2 Results for ##{hashtag} on Flickr
+    
+    each flickrPhoto in flickrPhotos
+      img(src=flickrPhoto.url alt=flickrPhoto.text)
+      small= 'Posted by ' + flickrPhoto.owner
+      p= flickrPhoto.text
+  
+  //- .col-md
+  //-   h2 Results for ##{hashtag} on Instagram
+  //-   p [display instagram results here]
+    //- ul
+    //-   each insta in instas
+    //-     li
+          //- p= post.thumbnail
+          //- p= post.date
+          //- p= post.owner_id
+          //- p= post.text
