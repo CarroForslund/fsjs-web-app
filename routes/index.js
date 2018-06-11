@@ -45,18 +45,12 @@ router.post('/', function(req, res, next) {
       // console.log(result.photos.photo[0].id);
       // const photos = result.photos.photo;
       // tempFlickrResult = result.photos.photo;
-      flickrPhotos = result.photos.photo;
-      // console.log(result.photos.photo);
-      // tempFlickrResult = result.photos;
-    })
-  )
-  .then(function(){
-
-      for (const photo of flickrPhotos){
+      // flickrPhotos = result.photos.photo;
+      for (const photo of result.photos.photo){
 
         flickr.get("photos.getContext", {"photo_id": photo.id }, function(err, result){
           if (err) return console.error(err);
-          // console.log(result.prevphoto.title);
+          console.log(result.prevphoto.title);
           flickrResults.push({
             text: result.prevphoto.title,
             url: result.prevphoto.thumb,
@@ -68,7 +62,12 @@ router.post('/', function(req, res, next) {
           // // console.log(result.prevphoto.thumb);
           // flickrResults.push(photoObj);
         });
-      });
+
+      }
+      // console.log(result.photos.photo);
+      // tempFlickrResult = result.photos;
+    })
+  )
   .then(function(){
     console.log(flickrResults);
     res.render('index', {
